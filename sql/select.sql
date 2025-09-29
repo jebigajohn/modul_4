@@ -105,7 +105,7 @@ HAVING COUNT(*) >= 10;
 
 -- ? Mit LIMIT kann man die ersten 5 Datensätze der Students abfragen
 SELECT * FROM Students
-LIMIT 5
+LIMIT 5;
 
 -- ? Mit OFFSET kann man Datensätze Überspringen
 -- ? 10 Studens abrufen und davor 10 überspringen
