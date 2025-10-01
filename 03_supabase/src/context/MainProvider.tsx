@@ -1,6 +1,11 @@
 import React, { createContext, useEffect, useState } from 'react'
 import type { IProduct } from '../interfaces/IProduct'
 import { getProducts_store } from '../functions/getProducts'
+import {
+  getCart,
+  getCategory,
+  getProductAndCategory,
+} from '../functions/getProducts_v2'
 
 export interface MainContextProps {
   products: IProduct[]
@@ -18,6 +23,9 @@ export default function MainProvider({
   useEffect(() => {
     async function getData_in_useEffect() {
       const products_variable_von_der_function = await getProducts_store()
+      await getProductAndCategory()
+      await getCart()
+      await getCategory()
 
       setProducts(products_variable_von_der_function)
     }
