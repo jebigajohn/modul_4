@@ -4,5 +4,5 @@ export interface ICart {
   id: number
   cart_id: number
   quantity: number
-  products: IProduct[]
+  products: IProduct
 }
