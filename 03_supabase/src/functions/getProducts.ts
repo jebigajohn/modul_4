@@ -2,12 +2,14 @@ import type { IProduct } from '../interfaces/IProduct'
 import supabase from '../utils/supabase'
 
 export async function getProducts_store(): Promise<IProduct[]> {
-  const { data: products, error } = await supabase.from('products').select('*')
+  const { data: products, error } = await supabase
+    .from('products')
+    .select(`id, title, price, quality,category:categories(categoryname)`)
   if (error) {
     console.error(error)
   }
 
-  return products as IProduct[]
+  return products as unknown as IProduct[]
 }
 
 // # selectQueries Filter Supabase Methoden

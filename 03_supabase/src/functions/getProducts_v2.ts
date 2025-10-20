@@ -13,7 +13,7 @@ export async function getProductAndCategory(): Promise<IProduct[]> {
   if (error) {
     console.error(error)
   }
-  return products as IProduct[]
+  return products as unknown as IProduct[]
 }
 
 // # Cart_Items mit Produkten + Kategorien
