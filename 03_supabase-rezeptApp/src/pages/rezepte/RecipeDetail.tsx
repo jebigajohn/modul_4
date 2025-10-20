@@ -29,19 +29,19 @@ export default function RecipeDetail() {
     })()
   }, [id])
 
-  if (!recipe) return <p>Lade Rezept...</p>
+  if (!recipe) return <p className="text-muted-foreground">Lade Rezept...</p>
 
   return (
-    <section className="max-w-3xl mx-auto">
+    <section className="max-w-3xl mx-auto text-foreground">
       <h2 className="text-3xl font-bold mb-4">{recipe.name}</h2>
       {recipe.image_url && (
         <img
           src={recipe.image_url}
           alt={recipe.image_alt ?? recipe.name}
-          className="w-full rounded-lg mb-4"
+          className="w-full rounded-xl mb-4 border border-border"
         />
       )}
-      <p className="text-gray-700 mb-6">{recipe.description}</p>
+      <p className="mb-6">{recipe.description}</p>
 
       <h3 className="text-xl font-semibold mb-2">Zutaten</h3>
       <ul className="list-disc list-inside mb-6">

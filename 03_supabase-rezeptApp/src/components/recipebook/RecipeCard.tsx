@@ -1,7 +1,7 @@
 import { Star, Clock, ChefHat } from 'lucide-react'
 
 import { Badge } from '../ui/badge'
-import { Card, CardContent, CardFooter } from '../ui/card' // <-- Footer import
+import { Card, CardContent, CardFooter } from '../ui/card'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 
 interface RecipeCardProps {

@@ -22,7 +22,9 @@ export default function NavBar() {
     'px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer'
 
   const getLinkClass = (path: string) =>
-    isActive(path) ? `${linkBase} bg-gray-200` : `${linkBase} hover:bg-gray-100`
+    isActive(path)
+      ? `${linkBase} bg-secondary text-secondary-foreground`
+      : `${linkBase} hover:bg-secondary`
 
   const logOut = async () => {
     const { error } = await supabase.auth.signOut()
@@ -34,12 +36,17 @@ export default function NavBar() {
   }
 
   return (
-    <div className="flex items-center gap-3">
-      {/* Logo & Titel bleiben unverändert */}
-      <img src="/img/Icon.png" alt="Logo" className="h-5 w-5 object-contain" />
-      <h1 className="text-xl font-semibold">Die Rezeptwelt</h1>
+    <div className="flex justify-between gap-3 text-foreground flex-wrap md:flex-nowrap">
+      <div className="flex  gap-2 justify-center items-center">
+        <img
+          src="/img/Icon.png"
+          alt="Logo"
+          className="h-5 w-5 object-contain"
+        />
+        <h1 className="text-xl font-semibold">Die Rezeptwelt</h1>
+      </div>
 
-      <nav className="flex items-center gap-2">
+      <nav className="flex items-center space-x-2 overflow-x-auto scrollbar-none">
         <span className={getLinkClass('/')} onClick={() => navigate('/')}>
           Home
         </span>
@@ -87,18 +94,24 @@ export default function NavBar() {
           <div className="flex items-center space-x-4">
             <button
               onClick={logOut}
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-4 rounded-lg transition-all duration-200"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold py-1.5 px-4 rounded-lg transition-all duration-200"
             >
               Log Out
+            </button>
+            <button
+              onClick={() => navigate('/rezepte/neu')}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-1.5 px-4 rounded-lg transition-all duration-200"
+            >
+              Rezept erstellen
             </button>
           </div>
         )}
       </nav>
-      <div className="ml-auto flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <button
           onClick={toggle}
           aria-label="Toggle theme"
-          className="p-2 rounded-full border hover:bg-secondary transition"
+          className="p-2 rounded-full border border-border hover:bg-secondary transition"
           title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
         >
           {theme === 'dark' ? (

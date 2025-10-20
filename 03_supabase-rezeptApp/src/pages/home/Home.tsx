@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router'
 import { mainContext, type MainContextProps } from '../../context/MainProvider'
 import type { IRecipe } from '../../interfaces/IRecipe'
 import { toRecipeCardVM } from '../../mappers/recipeMappers'
-import { Search } from 'lucide-react'
+import { Cake, Coffee, Leaf, Salad, Search, Utensils } from 'lucide-react'
 import { RecipeCard } from '../../components/recipebook/RecipeCard'
 import { CategoryChip } from '../../components/categoryChip/CategoryChip'
 import { useAddToBook } from '../../hooks/useAddToBook'
+import { Input } from '../../components/ui/input'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -15,10 +16,28 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
 
-  const categoryChips = useMemo(
+  const ICON_MAP: Record<
+    string,
+    React.ComponentType<{ className?: string }>
+  > = {
+    alle: Utensils,
+    pasta: Utensils,
+    vegan: Leaf,
+    frühstück: Coffee,
+    fruehstueck: Coffee,
+    salad: Salad,
+    salat: Salad,
+    dessert: Cake,
+  }
+
+  const chipData = useMemo(
     () => [
-      { id: 'all', label: 'Alle' },
-      ...categories.map((c) => ({ id: c.id, label: c.name })),
+      { id: 'all', label: 'Alle', icon: Utensils },
+      ...categories.map((c) => ({
+        id: c.id,
+        label: c.name,
+        icon: ICON_MAP[c.name.toLowerCase()] ?? Utensils,
+      })),
     ],
     [categories]
   )
@@ -41,40 +60,38 @@ export default function Home() {
   }, [vms, selectedCategory, searchQuery, categories])
 
   return (
-    <div className="min-h-screen pb-10">
-      {/* Header-like Suchfeld */}
-      <div className="sticky top-0 bg-white/80 backdrop-blur border-b z-10 px-4 py-4">
+    <div className="min-h-screen pb-10 bg-background">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-lg border-b border-border z-10 px-4 py-4">
         <div className="relative max-w-3xl mx-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <Input
             type="search"
             placeholder="Rezepte suchen…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 rounded-lg border"
+            className="pl-10 pr-3"
           />
         </div>
       </div>
 
-      <div className="px-4 py-6 max-w-6xl mx-auto">
-        {/* Kategorien */}
+      <div className="px-4 py-6 max-w-6xl mx-auto text-foreground">
         <h2 className="mb-3 text-lg font-semibold">Kategorien</h2>
-        <div className="flex gap-3 overflow-x-auto pb-2">
-          {categoryChips.map((chip) => (
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
+          {chipData.map((chip) => (
             <CategoryChip
               key={chip.id}
               label={chip.label}
+              icon={chip.icon}
               active={selectedCategory === chip.id}
               onClick={() => setSelectedCategory(chip.id)}
             />
           ))}
         </div>
 
-        {/* Grid */}
         <h2 className="mt-8 mb-4 text-lg font-semibold">
           {selectedCategory === 'all'
             ? 'Entdecke Rezepte'
-            : categoryChips.find((c) => c.id === selectedCategory)?.label}
+            : chipData.find((c) => c.id === selectedCategory)?.label}
         </h2>
 
         {filtered.length === 0 ? (
@@ -86,7 +103,7 @@ export default function Home() {
             <p className="text-sm">Passe die Suche oder die Kategorie an.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filtered.map((vm) => (
               <RecipeCard
                 key={vm.id}

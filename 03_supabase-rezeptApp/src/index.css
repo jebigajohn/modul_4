@@ -1,7 +1,15 @@
 @import 'tailwindcss';
 
-/* Light Theme Tokens */
+@custom-variant dark (&:is(.dark *));
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pacifico&display=swap');
+
 :root {
+  --font-size: 16px;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-handwritten: 'Pacifico', cursive;
+
+  /* Rezeptewelt warm color palette */
   --background: #fff8f3;
   --foreground: #2d2416;
   --card: #ffffff;
@@ -19,12 +27,18 @@
   --destructive: #c2452d;
   --destructive-foreground: #ffffff;
   --border: rgba(107, 142, 35, 0.15);
-  --input: #ffffff;
+  --input: transparent;
+  --input-background: #ffffff;
+  --switch-background: #d99e82;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
   --ring: #6b8e23;
+  --chart-1: #6b8e23;
+  --chart-2: #d99e82;
+  --chart-3: #f4e3c2;
+  --chart-4: #8b7355;
+  --chart-5: #c2452d;
   --radius: 0.75rem;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-handwritten: 'Pacifico', cursive;
-  /* Sidebar (optional, falls genutzt) */
   --sidebar: #ffffff;
   --sidebar-foreground: #2d2416;
   --sidebar-primary: #6b8e23;
@@ -35,10 +49,9 @@
   --sidebar-ring: #6b8e23;
 }
 
-/* Dark Theme Tokens */
 .dark {
   --background: #1a1612;
-  --foreground: #f4e3c2;
+  --foreground: #ffa600;
   --card: #2d2416;
   --card-foreground: #f4e3c2;
   --popover: #2d2416;
@@ -56,6 +69,13 @@
   --border: rgba(143, 175, 60, 0.2);
   --input: #3d3426;
   --ring: #8faf3c;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #8faf3c;
+  --chart-2: #b97a5e;
+  --chart-3: #f4e3c2;
+  --chart-4: #b39f88;
+  --chart-5: #d95a42;
   --sidebar: #2d2416;
   --sidebar-foreground: #f4e3c2;
   --sidebar-primary: #8faf3c;
@@ -66,7 +86,6 @@
   --sidebar-ring: #8faf3c;
 }
 
-/* Tailwind Tokens */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -86,24 +105,98 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  html {
-    font-size: 16px;
-  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
   }
+
   .font-handwritten {
     font-family: var(--font-handwritten);
   }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
 }

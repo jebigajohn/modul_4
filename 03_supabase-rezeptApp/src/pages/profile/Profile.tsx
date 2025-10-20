@@ -4,6 +4,8 @@ import { mainContext } from '../../context/MainProvider'
 import supabase from '../../utils/supabase'
 import { Link } from 'react-router'
 import { uploadPhoto } from '../../functions/uploadPhoto'
+import { Input } from '../../components/ui/input'
+import { Button } from '../../components/ui/button'
 
 interface IProfileProps {
   user: IUser
@@ -20,7 +22,6 @@ export default function Profile() {
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null)
   const [uploading, setUploading] = useState<boolean>(false)
 
-  // Fallback-Avatar
   const avatarSrc = useMemo(
     () =>
       user?.img_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=user',
@@ -49,8 +50,6 @@ export default function Profile() {
     fetchData()
   }, [])
 
-  // === Username-Validierung ===
-  // Regeln: 3–20 Zeichen, nur a-z 0-9 _ -
   function validateUsername(name: string): string {
     if (!name || name.trim().length < 3) return 'Mindestens 3 Zeichen.'
     if (name.trim().length > 20) return 'Maximal 20 Zeichen.'
@@ -92,7 +91,6 @@ export default function Profile() {
     setIsEditing(false)
   }
 
-  // === Upload-Button UX ===
   async function handleUploadPhoto() {
     if (!profilePhoto || !user) return null
     setUploading(true)
@@ -114,61 +112,51 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-10">
       {user ? (
-        <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
-          <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">
-            Your Profile
-          </h2>
+        <div className="w-full max-w-md bg-card text-card-foreground rounded-2xl border border-border shadow p-8 space-y-6">
+          <h2 className="text-2xl font-semibold text-center">Your Profile</h2>
 
           <div className="flex flex-col items-center space-y-3">
             <img
               src={avatarSrc}
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600 shadow-md"
+              className="w-32 h-32 rounded-full object-cover border-4 border-border shadow"
             />
           </div>
 
-          {/* Upload */}
           <div className="space-y-2">
-            <input
+            <Input
               type="file"
               accept="image/*"
               onChange={(e) => {
                 if (e.target.files?.[0]) setProfilePhoto(e.target.files[0])
               }}
-              className="w-full text-gray-700 dark:text-gray-300"
               disabled={uploading}
             />
             {profilePhoto && (
-              <button
+              <Button
                 onClick={handleUploadPhoto}
                 disabled={uploading}
-                className={`w-full rounded-lg py-2 font-semibold transition-all duration-200 shadow-md hover:shadow-lg
-                  ${
-                    uploading
-                      ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                      : 'bg-green-600 hover:bg-green-700 text-white'
-                  }
-                `}
+                className="w-full"
+                variant={uploading ? 'secondary' : 'default'}
               >
                 {uploading ? 'Uploading…' : 'Upload Photo'}
-              </button>
+              </Button>
             )}
           </div>
 
-          {/* Username-Editor */}
           <div
             onDoubleClick={handleDoubleClick}
-            className="cursor-pointer p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
+            className="cursor-pointer p-4 bg-secondary rounded-lg"
           >
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">
+            <p className="text-sm text-secondary-foreground/90 mb-1">
               Username
             </p>
 
             {isEditing ? (
               <div className="space-y-2">
-                <input
+                <Input
                   type="text"
                   placeholder="Change your username"
                   value={newUserName}
@@ -176,74 +164,56 @@ export default function Profile() {
                     setNewUserName(e.target.value)
                     setUsernameError(validateUsername(e.target.value))
                   }}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2
-                    ${
-                      usernameError
-                        ? 'border-red-500 focus:ring-red-400'
-                        : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
-                    }
-                    bg-white dark:bg-gray-800 dark:text-white
-                  `}
                 />
                 {usernameError && (
-                  <p className="text-sm text-red-600">{usernameError}</p>
+                  <p className="text-sm text-destructive">{usernameError}</p>
                 )}
 
                 <div className="flex gap-2">
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
+                    className="flex-1"
                     onClick={() => setIsEditing(false)}
-                    className="flex-1 rounded-lg py-2 border"
                   >
                     Cancel
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={handleSave}
                     disabled={
                       !!usernameError ||
                       newUserName.trim() === (user.username || '').trim()
                     }
-                    className={`flex-1 rounded-lg py-2 font-semibold transition
-                      ${
-                        !!usernameError ||
-                        newUserName.trim() === (user.username || '').trim()
-                          ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                          : 'bg-blue-600 hover:bg-blue-700 text-white'
-                      }
-                    `}
+                    className="flex-1"
                   >
                     Save
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
-              <p className="text-lg font-medium text-gray-800 dark:text-gray-100">
-                {user.username}
-              </p>
+              <p className="text-lg font-medium">{user.username}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <p className="text-gray-700 dark:text-gray-300">
+            <p>
               Firstname: <span className="font-medium">{user.firstname}</span>
             </p>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p>
               Lastname: <span className="font-medium">{user.lastname}</span>
             </p>
           </div>
 
           <Link
             to="/"
-            className="block text-center text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mt-2"
+            className="block text-center text-sm text-primary hover:underline mt-2"
           >
             Back to Home
           </Link>
         </div>
       ) : (
-        <p className="text-center text-gray-700 dark:text-gray-300">
-          Loading profile...
-        </p>
+        <p className="text-center text-muted-foreground">Loading profile...</p>
       )}
     </div>
   )

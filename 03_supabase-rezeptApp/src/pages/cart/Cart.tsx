@@ -44,25 +44,23 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10">
+    <div className="min-h-screen bg-background py-10">
       <div className="container mx-auto px-6 max-w-3xl">
-        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8 text-center">
-          Deine Rezepte
-        </h2>
+        <h2 className="text-3xl font-bold mb-8 text-center">Deine Rezepte</h2>
 
         {cart.length === 0 ? (
-          <div className="text-center text-gray-600 dark:text-gray-400">
+          <div className="text-center text-muted-foreground ">
             <p className="mb-4">Deine Rezeptsammlung ist derzeit leer.</p>
             <Link
               to="/"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200"
+              className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2 px-4 rounded-lg transition-all duration-200"
             >
               Lass uns kochen
             </Link>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {cart.map((item: ICartItem) => (
                 <div
                   key={`${item.cart_id}-${item.recipe_id}`}

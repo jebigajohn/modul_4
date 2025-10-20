@@ -3,12 +3,14 @@ import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import supabase from '../../utils/supabase'
 import { mainContext, type MainContextProps } from '../../context/MainProvider'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Button } from '../ui/button'
 
 export default function CreateRecipePage() {
   const navigate = useNavigate()
   const { categories } = useContext(mainContext) as MainContextProps
 
-  // States
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('') // category_id (uuid)
@@ -35,7 +37,6 @@ export default function CreateRecipePage() {
   const updateInstruction = (idx: number, val: string) =>
     setInstructions((prev) => prev.map((v, i) => (i === idx ? val : v)))
 
-  // Basic Validation
   function validate(): string {
     if (!title.trim()) return 'Bitte einen Titel angeben.'
     if (!description.trim()) return 'Bitte eine Beschreibung angeben.'
@@ -98,51 +99,46 @@ export default function CreateRecipePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-10">
-      <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
+    <div className="min-h-screen bg-background px-4 py-10">
+      <div className="max-w-3xl mx-auto bg-card text-card-foreground rounded-2xl border border-border shadow p-6">
         <h1 className="text-2xl font-semibold mb-6">Neues Rezept erstellen</h1>
 
         {formError && (
-          <div className="mb-4 rounded-md border border-red-300 bg-red-50 text-red-700 px-3 py-2">
+          <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 text-destructive px-3 py-2">
             {formError}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Titel */}
-          <div>
-            <label className="block text-sm mb-1">Titel *</label>
-            <input
+          <div className="grid gap-1.5">
+            <Label>Titel *</Label>
+            <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
-              placeholder="z.B. Cremige Knoblauch-Pasta"
             />
           </div>
 
-          {/* Beschreibung */}
-          <div>
-            <label className="block text-sm mb-1">Beschreibung *</label>
+          <div className="grid gap-1.5">
+            <Label>Beschreibung *</Label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}
-              className="w-full rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
+              className="w-full rounded-xl border border-border px-3 py-2 bg-[--color-input-background] text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
               placeholder="Kurze Beschreibung des Rezepts…"
             />
           </div>
 
-          {/* Kategorie & Servings */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm mb-1">Kategorie *</label>
+            <div className="grid gap-1.5">
+              <Label>Kategorie *</Label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 required
-                className="w-full rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
+                className="w-full rounded-xl border border-border px-3 py-2 bg-[--color-input-background] text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
               >
                 <option value="">Bitte wählen…</option>
                 {categories.map((c) => (
@@ -153,82 +149,74 @@ export default function CreateRecipePage() {
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm mb-1">Portionen *</label>
-              <input
+            <div className="grid gap-1.5">
+              <Label>Portionen *</Label>
+              <Input
                 type="number"
                 min={1}
                 value={servings}
                 onChange={(e) => setServings(e.target.value)}
                 required
-                className="w-full rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
               />
             </div>
           </div>
 
-          {/* Bild-URL */}
-          <div>
-            <label className="block text-sm mb-1">Bild-URL</label>
-            <input
+          <div className="grid gap-1.5">
+            <Label>Bild-URL</Label>
+            <Input
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://…"
-              className="w-full rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
             />
           </div>
 
-          {/* Zutaten */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm">Zutaten *</label>
-              <button
+              <Label>Zutaten *</Label>
+              <Button
                 type="button"
                 onClick={addIngredient}
-                className="rounded-md border px-3 py-1 text-sm"
+                variant="outline"
+                className="h-9 px-3"
               >
                 + Zutat
-              </button>
+              </Button>
             </div>
             <div className="space-y-2">
               {ingredients.map((ing, idx) => (
                 <div key={idx} className="flex gap-2">
-                  <input
+                  <Input
                     value={ing}
                     onChange={(e) => updateIngredient(idx, e.target.value)}
                     placeholder={`Zutat ${idx + 1}`}
                     required={idx === 0}
-                    className="flex-1 rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
+                    className="flex-1"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeIngredient(idx)}
                     disabled={ingredients.length === 1}
-                    className={`rounded-md border px-3 py-2 text-sm
-                      ${
-                        ingredients.length === 1
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }
-                    `}
+                    variant="outline"
+                    className="h-10"
                   >
                     Entfernen
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Schritte */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm">Zubereitungsschritte *</label>
-              <button
+              <Label>Zubereitungsschritte *</Label>
+              <Button
                 type="button"
                 onClick={addInstruction}
-                className="rounded-md border px-3 py-1 text-sm"
+                variant="outline"
+                className="h-9 px-3"
               >
                 + Schritt
-              </button>
+              </Button>
             </div>
             <div className="space-y-2">
               {instructions.map((step, idx) => (
@@ -242,49 +230,34 @@ export default function CreateRecipePage() {
                     placeholder={`Schritt ${idx + 1}`}
                     required={idx === 0}
                     rows={2}
-                    className="flex-1 rounded-lg border px-3 py-2 bg-white dark:bg-gray-800"
+                    className="flex-1 rounded-xl border border-border px-3 py-2 bg-[--color-input-background] text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeInstruction(idx)}
                     disabled={instructions.length === 1}
-                    className={`rounded-md border px-3 py-2 text-sm
-                      ${
-                        instructions.length === 1
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }
-                    `}
+                    variant="outline"
+                    className="h-10"
                   >
                     Entfernen
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex gap-3">
-            <button
+            <Button
               type="button"
               onClick={() => navigate(-1)}
-              className="flex-1 rounded-lg border px-4 py-2"
+              variant="outline"
+              className="flex-1"
             >
               Abbrechen
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className={`flex-1 rounded-lg px-4 py-2 font-semibold transition
-                ${
-                  submitting
-                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                    : 'bg-primary text-primary-foreground hover:opacity-90'
-                }
-              `}
-            >
+            </Button>
+            <Button type="submit" disabled={submitting} className="flex-1">
               {submitting ? 'Speichern…' : 'Rezept speichern'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

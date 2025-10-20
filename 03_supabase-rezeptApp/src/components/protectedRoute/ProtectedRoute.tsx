@@ -1,21 +1,17 @@
 import { useContext } from 'react'
+import { Navigate, useLocation } from 'react-router'
 import { mainContext, type MainContextProps } from '../../context/MainProvider'
-import { Navigate } from 'react-router'
 
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { isLoggedIn, loading } = useContext(mainContext) as MainContextProps
-
-  if (loading) {
-    return <div>Loading...</div>
-  }
+  const { isLoggedIn } = useContext(mainContext) as MainContextProps
+  const location = useLocation()
 
   if (!isLoggedIn) {
-    return <Navigate to={'/login'} replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
-
-  return children
+  return <>{children}</>
 }

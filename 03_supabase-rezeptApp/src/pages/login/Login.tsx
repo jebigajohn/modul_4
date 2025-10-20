@@ -1,6 +1,9 @@
 import React, { useRef } from 'react'
 import supabase from '../../utils/supabase'
 import { useNavigate } from 'react-router'
+import { Label } from '../../components/ui/label'
+import { Input } from '../../components/ui/input'
+import { Button } from '../../components/ui/button'
 
 export default function Login() {
   const emailRef = useRef<HTMLInputElement>(null)
@@ -29,58 +32,41 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
-          Login
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md bg-card text-card-foreground rounded-2xl border border-border shadow p-8">
+        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Email
-            </label>
-            <input
+          <div className="grid gap-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input
               type="email"
               name="email"
               placeholder="you@example.com"
               ref={emailRef}
               required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
             />
           </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Password
-            </label>
-            <input
+          <div className="grid gap-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
               type="password"
               name="password"
               placeholder="••••••••"
               ref={passwordRef}
               required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-          >
+          <Button type="submit" className="w-full">
             Login
-          </button>
+          </Button>
 
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3">
-            still have not Account?
+          <p className="text-center text-sm text-muted-foreground mt-3">
+            Still have not Account?{' '}
             <a
               href="/signup"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+              className="text-primary hover:underline font-medium"
             >
               Sign Up
             </a>

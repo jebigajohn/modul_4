@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
 import supabase from '../../utils/supabase'
+import { Label } from '../../components/ui/label'
+import { Input } from '../../components/ui/input'
+import { Button } from '../../components/ui/button'
 
 export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,74 +60,47 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-full max-w-md bg-card text-card-foreground rounded-2xl border border-border shadow p-8">
+        <h2 className="text-2xl font-semibold text-center mb-6">
           Create Your Account
         </h2>
 
         <form onSubmit={handleSignUp} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              name="firstname"
-              placeholder="Firstname"
-              required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
-            />
+          <div className="grid gap-1.5">
+            <Label htmlFor="firstname">Firstname</Label>
+            <Input type="text" name="firstname" required />
           </div>
 
-          <div>
-            <input
-              type="text"
-              name="lastname"
-              placeholder="Lastname"
-              required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
-            />
+          <div className="grid gap-1.5">
+            <Label htmlFor="lastname">Lastname</Label>
+            <Input type="text" name="lastname" required />
           </div>
 
-          <div>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
-            />
+          <div className="grid gap-1.5">
+            <Label htmlFor="username">Username</Label>
+            <Input type="text" name="username" required />
           </div>
 
-          <div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              required
-              className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-white"
-            />
+          <div className="grid gap-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input type="email" name="email" required />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-          >
+          <div className="grid gap-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input type="password" name="password" required />
+          </div>
+
+          <Button type="submit" className="w-full">
             Sign Up
-          </button>
+          </Button>
 
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3">
+          <p className="text-center text-sm text-muted-foreground mt-3">
             Already have an account?{' '}
             <Link
               to="/login"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+              className="text-primary hover:underline font-medium"
             >
               Log in
             </Link>
